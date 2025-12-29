@@ -6,7 +6,7 @@ import { createUser } from "@/lib/actions/user.actions";
 export default function CreateUserForm() {
   const [state, formAction, isPending] = useActionState(createUser, {
     success: false,
-    errors: { name: [], email: [], role: [], status: [] },
+    message: "",
   });
 
   console.log(state);

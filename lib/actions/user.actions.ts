@@ -19,11 +19,14 @@ type FormState =
       errors?: never;
     };
 
-export async function createUser(_: FormState, formData: FormData) {
+const createUser = async (
+  _: FormState,
+  formData: FormData
+): Promise<FormState> => {
   const session = await auth();
 
   if (!session) {
-    return { success: false, error: "User unauthenticated" };
+    return { success: false, message: "User unauthenticated" };
   }
 
   await dbConnect();
@@ -55,4 +58,6 @@ export async function createUser(_: FormState, formData: FormData) {
     }
     return { success: false, message: "Database error" };
   }
-}
+};
+
+export { createUser };
