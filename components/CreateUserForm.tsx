@@ -24,12 +24,12 @@ export default function CreateUserForm() {
         )}
       </div>
 
-      <div>
+      <div className="m-4 p-4">
         <input
           name="email"
           type="email"
           placeholder="email@test.com"
-          className="border p-2 text-black"
+          className="border p-2 text-black border-amber-50 rounded"
           required
         />
         {state?.errors?.email && (
@@ -37,7 +37,7 @@ export default function CreateUserForm() {
         )}
       </div>
 
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+      <button type="submit" className="btn btn-secondary">
         {isPending ? "Saving..." : "Save user"}
       </button>
 

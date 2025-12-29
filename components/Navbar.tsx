@@ -15,7 +15,7 @@ export default async function Navbar() {
               await signOut();
             }}
           >
-            <button className="text-red-500">Quit</button>
+            <button className="btn btn-warning">Quit</button>
           </form>
         </div>
       ) : (
