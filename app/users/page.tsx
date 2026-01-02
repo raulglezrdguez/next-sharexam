@@ -15,7 +15,7 @@ export default async function Page() {
 
       <h2 className="text-xl mb-4">Users registered:</h2>
       {users.map((u) => (
-        <p key={u._id.toString()}>
+        <p key={(u._id as string).toString()}>
           {u.name} - {u.email}
         </p>
       ))}
