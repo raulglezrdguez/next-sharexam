@@ -186,7 +186,7 @@ const QuestionNodeProperties = ({ data, id }: Props) => {
       <Button
         variant={"outline"}
         onClick={handleSave}
-        className="w-24 self-center text-gray-200 hover:text-green-200 hover:cursor-pointer mt-4 transition-colors duration-300 ease-in-out"
+        className="w-24 self-center text-gray-200 hover:text-green-800 hover:cursor-pointer mt-4 transition-colors duration-300 ease-in-out"
       >
         <Save size={14} />
       </Button>
