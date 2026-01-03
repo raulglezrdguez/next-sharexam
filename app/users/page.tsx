@@ -1,10 +1,13 @@
-import CreateUserForm from "@/components/CreateUserForm";
-import dbConnect from "@/lib/db";
-import User from "@/lib/models/user.model";
+"use client";
 
-export default async function Page() {
-  await dbConnect();
-  const users = await User.find({}).lean();
+import CreateUserForm from "@/components/CreateUserForm";
+import { useUsers } from "@/lib/hooks/useUsers";
+
+export default function Page() {
+  const { data: users, isLoading, error } = useUsers();
+
+  if (isLoading) return <div className="p-8">Loading...</div>;
+  if (error) return <div className="p-8">Error loading users</div>;
 
   return (
     <div className="p-8">
@@ -14,8 +17,8 @@ export default async function Page() {
       <hr className="my-8" />
 
       <h2 className="text-xl mb-4">Users registered:</h2>
-      {users.map((u) => (
-        <p key={(u._id as string).toString()}>
+      {users?.map((u) => (
+        <p key={u._id}>
           {u.name} - {u.email}
         </p>
       ))}

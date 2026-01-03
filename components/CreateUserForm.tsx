@@ -1,47 +1,71 @@
 "use client";
 
-import { useActionState } from "react";
-import { createUser } from "@/lib/actions/user.actions";
+import { useState } from "react";
+import { useCreateUser } from "@/lib/hooks/useUsers";
 
 export default function CreateUserForm() {
-  const [state, formAction, isPending] = useActionState(createUser, {
-    success: false,
-    message: "",
-  });
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const createUserMutation = useCreateUser();
 
-  console.log(state);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await createUserMutation.mutateAsync({
+        name,
+        email,
+        role: 1,
+        status: 1,
+      });
+
+      // Reset form on success
+      setName("");
+      setEmail("");
+    } catch (error) {
+      console.error("Error creating user:", error);
+    }
+  };
+
   return (
-    <form action={formAction} className="flex flex-col gap-4 w-64">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-64">
       <div>
         <input
           name="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Name"
           className="border p-2 text-black"
           required
         />
-        {state?.errors?.name && (
-          <p className="text-red-500 text-sm">{state.errors.name[0]}</p>
-        )}
       </div>
 
       <div className="m-4 p-4">
         <input
           name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           type="email"
           placeholder="email@test.com"
           className="border p-2 text-black border-amber-50 rounded"
           required
         />
-        {state?.errors?.email && (
-          <p className="text-red-500 text-sm">{state.errors.email[0]}</p>
-        )}
       </div>
 
-      <button type="submit" className="btn btn-secondary">
-        {isPending ? "Saving..." : "Save user"}
+      <button
+        type="submit"
+        className="btn btn-secondary"
+        disabled={createUserMutation.isPending}
+      >
+        {createUserMutation.isPending ? "Saving..." : "Save user"}
       </button>
 
-      {state?.success && <p className="text-green-500 text-center">Ready!</p>}
+      {createUserMutation.isSuccess && (
+        <p className="text-green-500 text-center">User created successfully!</p>
+      )}
+      {createUserMutation.isError && (
+        <p className="text-red-500 text-center">Error creating user</p>
+      )}
     </form>
   );
 }

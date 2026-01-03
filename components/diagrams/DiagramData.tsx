@@ -23,22 +23,13 @@ const DiagramData = ({ diagram, refresh }: Props) => {
 
   return (
     <div className="flex flex-row justify-between items-center align-middle gap-2 text-gray-200 mb-2 border rounded py-2 px-4">
-      <Button
-        variant={"outline"}
-        onClick={() => {}}
-        className="w-6 h-6 self-center text-gray-200 hover:text-green-200 hover:cursor-pointer transition-colors duration-300 ease-in-out"
-      >
-        <Check size={14} />
-      </Button>
-
-      <h2>{diagram.title}</h2>
-      <Button
-        variant={"outline"}
+      <h2 className="max-w-40 text-sm truncate">{diagram.title}</h2>
+      <button
         onClick={() => setStatus("edit")}
-        className="w-6 h-6 self-center text-gray-200 hover:text-green-200 hover:cursor-pointer transition-colors duration-300 ease-in-out"
+        className="btn btn-secondary btn-sm"
       >
         <Edit2 size={14} />
-      </Button>
+      </button>
     </div>
   );
 };
