@@ -1,6 +1,5 @@
 import { MyEdge } from "@/types/flow";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
 import { useFlowStore } from "@/store/flowStore";
 import { Save } from "lucide-react";
 import { isValidJavaScriptExpression } from "@/lib/utils";
@@ -51,13 +50,12 @@ const EdgeProperties = ({ edge }: Props) => {
           className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
         />
       </label>
-      <Button
-        variant={"outline"}
+      <button
         onClick={handleClick}
-        className="w-24 self-center text-gray-200 hover:text-green-200 hover:cursor-pointer mt-4 transition-colors duration-300 ease-in-out"
+        className="w-24 self-center btn btn-primary"
       >
         <Save size={14} />
-      </Button>
+      </button>
     </div>
   );
 };

@@ -141,13 +141,12 @@ const QuestionNodeProperties = ({ data, id }: Props) => {
                 onChange={(e) => setOption(opt.id, opt.id, e.target.value)}
                 className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
               />
-              <Button
-                variant={"outline"}
+              <button
                 onClick={() => removeOption(opt.id)}
-                className="hover:cursor-pointer ml-2 text-red-400 hover:text-red-200 transition-colors duration-300 ease-in-out"
+                className="hover:cursor-pointer ml-2 btn btn-error"
               >
                 <XCircle size={14} />
-              </Button>
+              </button>
             </div>
           ))}
           <div className="flex flex-row justify-center align-middle items-center mt-2">
@@ -172,24 +171,19 @@ const QuestionNodeProperties = ({ data, id }: Props) => {
               onChange={(e) => setNewValue(e.target.value)}
               className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
             />
-            <Button
-              variant={"outline"}
+            <button
               onClick={addOption}
-              className="hover:cursor-pointer ml-2 text-green-400 hover:text-green-200 transition-colors duration-300 ease-in-out"
+              className="hover:cursor-pointer ml-2 btn btn-success"
             >
               <Check size={14} />
-            </Button>
+            </button>
           </div>
         </>
       )}
 
-      <Button
-        variant={"outline"}
-        onClick={handleSave}
-        className="w-24 self-center text-gray-200 hover:text-green-800 hover:cursor-pointer mt-4 transition-colors duration-300 ease-in-out"
-      >
+      <button onClick={handleSave} className="w-24 self-center btn btn-primary">
         <Save size={14} />
-      </Button>
+      </button>
     </div>
   );
 };

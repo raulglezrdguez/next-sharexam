@@ -2,7 +2,6 @@
 
 import { GeminiInfoNodeData } from "@/types/flow";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { Save } from "lucide-react";
 import { useFlowStore } from "@/store/flowStore";
 
@@ -50,13 +49,12 @@ const GeminiInfoNodeProperties = ({ data, id }: Props) => {
           className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
         />
       </label>
-      <Button
-        variant={"outline"}
+      <button
         onClick={handleClick}
-        className="w-24 self-center text-gray-200 hover:text-green-200 hover:cursor-pointer mt-4 transition-colors duration-300 ease-in-out"
+        className="w-24 self-center btn btn-primary"
       >
         <Save size={14} />
-      </Button>
+      </button>
       <hr className="mt-4" />{" "}
       <p className="mt-2 text-sm text-gray-400">
         This node provides information for Gemini Nodes. It does not have

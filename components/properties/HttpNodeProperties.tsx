@@ -7,7 +7,6 @@ import {
   RESPONSE_TYPES,
 } from "@/types/flow";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
 import { Save } from "lucide-react";
 import { useFlowStore } from "@/store/flowStore";
 
@@ -103,13 +102,9 @@ const HttpNodeProperties = ({ data, id }: Props) => {
         </select>
       </label>
 
-      <Button
-        variant={"outline"}
-        onClick={handleSave}
-        className="w-24 self-center text-gray-200 hover:text-green-200 hover:cursor-pointer mt-4 transition-colors duration-300 ease-in-out"
-      >
+      <button onClick={handleSave} className="w-24 self-center btn btn-primary">
         <Save size={14} />
-      </Button>
+      </button>
     </div>
   );
 };

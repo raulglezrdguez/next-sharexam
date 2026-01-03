@@ -106,13 +106,9 @@ const GeminiNodeProperties = ({ data, id }: Props) => {
         />
       </label>
 
-      <Button
-        variant={"outline"}
-        onClick={handleSave}
-        className="w-24 self-center text-gray-200 hover:text-green-200 hover:cursor-pointer mt-4 transition-colors duration-300 ease-in-out"
-      >
+      <button onClick={handleSave} className="w-24 self-center btn btn-primary">
         <Save size={14} />
-      </Button>
+      </button>
     </div>
   );
 };

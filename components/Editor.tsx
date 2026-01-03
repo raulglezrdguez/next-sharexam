@@ -38,7 +38,6 @@ import { OutputNode } from "./OutputNode";
 import { QuestionModal } from "./QuestionModal";
 import { GeminiInfoNode } from "./GeminiInfoNode";
 import Properties from "./properties/Properties";
-import MenuEditor from "./MenuEditor";
 import Diagrams from "./diagrams/Diagrams";
 
 const nodeTypes = {
