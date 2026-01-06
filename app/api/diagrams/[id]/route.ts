@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import dbConnect from "../../../../lib/db";
-import Diagram from "../../../../lib/models/diagram.model";
+import { User, Diagram } from "../../../../lib/models";
 import { UpdateDiagramInput } from "../../../../lib/types/diagram";
 
 interface RouteParams {

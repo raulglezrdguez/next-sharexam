@@ -1,6 +1,5 @@
 "use client";
 
-import { PlusSquare } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import * as Switch from "@radix-ui/react-switch";
 import { DiagramOutput } from "@/lib/types/diagram";

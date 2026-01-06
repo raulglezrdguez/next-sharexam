@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import dbConnect from "../../../lib/db";
-import Diagram from "../../../lib/models/diagram.model";
+import { User, Diagram } from "../../../lib/models";
 import { CreateDiagramInput } from "../../../lib/types/diagram";
 
 export async function GET(request: NextRequest) {
@@ -25,7 +25,6 @@ export async function GET(request: NextRequest) {
     } else if (author) {
       query.author = author;
     } else {
-      // Si no es público y no especifica autor, mostrar solo los del usuario autenticado
       query.author = session.user.id;
     }
 

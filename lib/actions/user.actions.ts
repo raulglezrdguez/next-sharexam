@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 
 import dbConnect from "@/lib/db";
-import User from "@/lib/models/user.model";
+import { User } from "@/lib/models";
 import { UserValidationSchema } from "../validations/user.validation";
 
 type FormState =
