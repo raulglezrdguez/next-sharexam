@@ -2,19 +2,21 @@
 
 import { DiagramOutput } from "@/lib/types/diagram";
 import { Edit2 } from "lucide-react";
-import { useState } from "react";
 import DiagramEdit from "./DiagramEdit";
 
-type Props = { diagram: DiagramOutput; refresh: () => void };
+type Props = {
+  diagram: DiagramOutput;
+  refresh: () => void;
+  editId: string | null;
+  setEditId: (id: string | null) => void;
+};
 
-const DiagramData = ({ diagram, refresh }: Props) => {
-  const [status, setStatus] = useState<"show" | "edit">("show");
-
-  if (status === "edit") {
+const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
+  if (editId === diagram._id) {
     return (
       <DiagramEdit
         diagram={diagram}
-        back={() => setStatus("show")}
+        back={() => setEditId(null)}
         refresh={refresh}
       />
     );
@@ -24,7 +26,7 @@ const DiagramData = ({ diagram, refresh }: Props) => {
     <div className="flex flex-row justify-between items-center align-middle gap-2 text-gray-200 mb-2 border rounded py-2 px-4">
       <h2 className="max-w-40 text-sm truncate">{diagram.title}</h2>
       <button
-        onClick={() => setStatus("edit")}
+        onClick={() => setEditId(diagram._id)}
         className="btn btn-secondary btn-sm"
       >
         <Edit2 size={14} />

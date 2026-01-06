@@ -9,6 +9,7 @@ import DiagramCreate from "./DiagramCreate";
 const Diagrams = () => {
   const [publicDiagrams, setPublicDiagrams] = useState<boolean>(false);
   const [diagrams, setDiagrams] = useState<DiagramOutput[]>([]);
+  const [editId, setEditId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDiagrams = async () => {
@@ -74,6 +75,8 @@ const Diagrams = () => {
               key={diagram._id}
               diagram={diagram}
               refresh={refreshDiagrams}
+              editId={editId}
+              setEditId={setEditId}
             />
           ))}
         </div>
