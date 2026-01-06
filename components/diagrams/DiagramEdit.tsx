@@ -1,7 +1,7 @@
 "use client";
 
 import { DiagramOutput, ResultInput } from "@/lib/types/diagram";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { Check, Edit3, Loader, Save, XCircle } from "lucide-react";
 import * as Switch from "@radix-ui/react-switch";
