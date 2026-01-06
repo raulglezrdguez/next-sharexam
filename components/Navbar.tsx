@@ -6,7 +6,7 @@ export default async function Navbar() {
   const session = await auth();
 
   return (
-    <nav className="flex flex-row justify-between p-4 border-b">
+    <nav className="flex flex-row justify-between p-4 border-b bg-gray-700 text-gray-200">
       <div className="flex flex-row justify-center align-middle items-center gap-2">
         <Link href={"/"} className="mr-5 md:mr-10">
           <Image
@@ -28,7 +28,7 @@ export default async function Navbar() {
               await signOut();
             }}
           >
-            <button className="btn btn-warning">Quit</button>
+            <button className="btn btn-error">Quit</button>
           </form>
         </div>
       ) : (
