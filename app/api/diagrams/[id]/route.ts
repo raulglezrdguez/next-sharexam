@@ -83,14 +83,18 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     if (body.description !== undefined) diagram.description = body.description;
     if (body.public !== undefined) diagram.public = body.public;
     if (body.result !== undefined) diagram.result = body.result;
-    if (body.nodes !== undefined) diagram.nodes = JSON.stringify(body.nodes);
-    if (body.edges !== undefined) diagram.edges = JSON.stringify(body.edges);
+    if (body.nodes !== undefined) diagram.nodes = body.nodes;
+    if (body.edges !== undefined) diagram.edges = body.edges;
     if (body.viewport !== undefined) diagram.viewport = body.viewport;
 
     await diagram.save();
-    await diagram.populate("author", "name email");
 
-    return NextResponse.json(diagram);
+    const updatedDiagram = await Diagram.findById(id).populate(
+      "author",
+      "name email"
+    );
+
+    return NextResponse.json(updatedDiagram);
   } catch (error) {
     console.error("Error updating diagram:", error);
     return NextResponse.json(

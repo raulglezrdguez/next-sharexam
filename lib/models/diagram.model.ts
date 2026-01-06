@@ -1,46 +1,7 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import User from "./user.model";
 
-export interface IDiagram extends Document {
-  title: string;
-  description: string;
-  author: mongoose.Types.ObjectId;
-  public: boolean;
-  result?: {
-    label: string;
-    value: string;
-    reference?: string;
-  }[];
-  nodes: {
-    id: string;
-    type: string;
-    position: {
-      x: number;
-      y: number;
-    };
-    measured: {
-      width: number;
-      height: number;
-    };
-    data?: Record<string, unknown>;
-  }[];
-  edges: {
-    id: string;
-    source: string;
-    target: string;
-    type?: string;
-    data?: Record<string, unknown>;
-  }[];
-  viewport: {
-    x?: number;
-    y?: number;
-    zoom?: number;
-  };
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const DiagramSchema = new Schema<IDiagram>(
+const DiagramSchema = new Schema(
   {
     title: {
       type: String,
@@ -68,30 +29,16 @@ const DiagramSchema = new Schema<IDiagram>(
         reference: String,
       },
     ],
-    nodes: [
-      {
-        id: String,
-        type: String,
-        position: {
-          x: Number,
-          y: Number,
-        },
-        measured: {
-          width: Number,
-          height: Number,
-        },
-        data: Schema.Types.Mixed,
-      },
-    ],
-    edges: [
-      {
-        id: String,
-        source: String,
-        target: String,
-        type: String,
-        data: Schema.Types.Mixed,
-      },
-    ],
+    nodes: {
+      type: [{}],
+      default: [],
+      required: true,
+    },
+    edges: {
+      type: [{}],
+      default: [],
+      required: true,
+    },
     viewport: {
       x: Number,
       y: Number,
@@ -104,4 +51,4 @@ const DiagramSchema = new Schema<IDiagram>(
 );
 
 export default mongoose.models.Diagram ||
-  mongoose.model<IDiagram>("Diagram", DiagramSchema);
+  mongoose.model("Diagram", DiagramSchema);

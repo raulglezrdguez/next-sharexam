@@ -1,7 +1,7 @@
 "use client";
 
 import { DiagramOutput, ResultInput } from "@/lib/types/diagram";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Check, Edit3, Loader, Save, XCircle } from "lucide-react";
 import * as Switch from "@radix-ui/react-switch";
@@ -76,9 +76,9 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
       description,
       public: publicDiagram,
       result: results,
-      nodes,
-      edges,
-      viewport,
+      nodes: nodes.length > 0 ? nodes : diagram.nodes, // Fallback to original nodes if store is empty
+      edges: edges.length > 0 ? edges : diagram.edges, // Fallback to original edges if store is empty
+      viewport: viewport || diagram.viewport, // Fallback to original viewport
     };
 
     try {
