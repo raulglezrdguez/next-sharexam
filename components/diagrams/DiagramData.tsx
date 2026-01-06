@@ -1,10 +1,9 @@
 "use client";
 
 import { DiagramOutput } from "@/lib/types/diagram";
-import { Check, Edit2 } from "lucide-react";
+import { Edit2 } from "lucide-react";
 import { useState } from "react";
 import DiagramEdit from "./DiagramEdit";
-import { Button } from "../ui/button";
 
 type Props = { diagram: DiagramOutput; refresh: () => void };
 

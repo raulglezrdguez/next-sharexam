@@ -68,6 +68,7 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
       }
 
       toast.success(`Diagram "${title}" saved!`);
+      refresh();
     } catch (err: unknown) {
       setError((err as Error).message || String(err));
     } finally {

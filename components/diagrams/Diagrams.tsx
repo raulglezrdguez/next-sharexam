@@ -36,8 +36,8 @@ const Diagrams = () => {
     try {
       const response = await fetch(`/api/diagrams?public=${publicDiagrams}`);
       if (response.ok) {
-        const data = await response.json();
-        setDiagrams(data);
+        const { diagrams } = await response.json();
+        setDiagrams(diagrams);
       } else {
         console.error("Error fetching diagrams");
       }

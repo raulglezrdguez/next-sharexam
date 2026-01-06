@@ -5,9 +5,9 @@ import { User, Diagram } from "../../../../lib/models";
 import { UpdateDiagramInput } from "../../../../lib/types/diagram";
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
@@ -20,10 +20,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     await dbConnect();
 
-    const diagram = await Diagram.findById(params.id).populate(
-      "author",
-      "name email"
-    );
+    const { id } = await params;
+
+    const diagram = await Diagram.findById(id).populate("author", "name email");
 
     if (!diagram) {
       return NextResponse.json({ error: "Diagram not found" }, { status: 404 });
@@ -55,7 +54,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const body: UpdateDiagramInput = await request.json();
     await dbConnect();
 
-    const diagram = await Diagram.findById(params.id);
+    const { id } = await params;
+
+    const diagram = await Diagram.findById(id);
 
     if (!diagram) {
       return NextResponse.json({ error: "Diagram not found" }, { status: 404 });
@@ -66,7 +67,15 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    Object.assign(diagram, body);
+    // Update the diagram fields
+    if (body.title !== undefined) diagram.title = body.title;
+    if (body.description !== undefined) diagram.description = body.description;
+    if (body.public !== undefined) diagram.public = body.public;
+    if (body.result !== undefined) diagram.result = body.result;
+    if (body.nodes !== undefined) diagram.nodes = JSON.stringify(body.nodes);
+    if (body.edges !== undefined) diagram.edges = JSON.stringify(body.edges);
+    if (body.viewport !== undefined) diagram.viewport = body.viewport;
+
     await diagram.save();
     await diagram.populate("author", "name email");
 
@@ -90,7 +99,9 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     await dbConnect();
 
-    const diagram = await Diagram.findById(params.id);
+    const { id } = await params;
+
+    const diagram = await Diagram.findById(id);
 
     if (!diagram) {
       return NextResponse.json({ error: "Diagram not found" }, { status: 404 });
@@ -101,7 +112,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    await Diagram.findByIdAndDelete(params.id);
+    await Diagram.findByIdAndDelete(id);
 
     return NextResponse.json({ message: "Diagram deleted successfully" });
   } catch (error) {
