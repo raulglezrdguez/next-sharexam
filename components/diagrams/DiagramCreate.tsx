@@ -64,7 +64,7 @@ const DiagramCreate = () => {
 
   if (creating) {
     return (
-      <div className="flex flex-col gap-4 align-middle justify-center items-start border rounded-2xl px-4 py-2 w-full">
+      <div className="mt-4 flex flex-col gap-4 align-middle justify-center items-start border rounded-sm px-4 py-2 w-full">
         <h2 className="text-lg font-semibold text-gray-100">New diagram</h2>
         <label
           htmlFor={`create-diagram-title`}
@@ -166,7 +166,7 @@ const DiagramCreate = () => {
 
   return (
     <button
-      className="mt-2 btn btn-success"
+      className="mt-4 btn btn-success"
       onClick={() => {
         setCreating(true);
         setValidationErrors({});

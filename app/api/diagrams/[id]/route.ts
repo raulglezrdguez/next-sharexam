@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import dbConnect from "../../../../lib/db";
 import { User, Diagram } from "../../../../lib/models";
 import { UpdateDiagramInput } from "../../../../lib/types/diagram";
+import { UpdateDiagramValidationSchema } from "../../../../lib/validations/diagram.validation";
 
 interface RouteParams {
   params: Promise<{
@@ -52,6 +53,16 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const body: UpdateDiagramInput = await request.json();
+
+    // Validate the input
+    const validationResult = UpdateDiagramValidationSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Validation failed", details: validationResult.error.issues },
+        { status: 400 }
+      );
+    }
+
     await dbConnect();
 
     const { id } = await params;

@@ -11,6 +11,7 @@ import { isValidJavaScriptExpression } from "@/lib/utils";
 import AlertMessage from "../AlertMessage";
 import { useFlowStore } from "@/store/flowStore";
 import { useSession } from "next-auth/react";
+import { UpdateDiagramValidationSchema } from "@/lib/validations/diagram.validation";
 
 type Props = { diagram: DiagramOutput; back: () => void; refresh: () => void };
 
@@ -33,6 +34,10 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
   const [newValue, setNewValue] = useState<string>("");
   const [newReference, setNewReference] = useState<string>("");
 
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string | undefined>
+  >({});
+
   const handleSave = async () => {
     for (let i = 0; i < results.length; i++) {
       const r = results[i];
@@ -41,6 +46,27 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
         toast.error(`Invalid expression: "${r.value}"`);
         return;
       }
+    }
+
+    // Clear previous errors
+    setValidationErrors({});
+
+    // Validate form data
+    const validationResult = UpdateDiagramValidationSchema.safeParse({
+      title,
+      description,
+      public: publicDiagram,
+    });
+
+    if (!validationResult.success) {
+      const errors: Record<string, string> = {};
+      validationResult.error.issues.forEach((error) => {
+        if (error.path[0]) {
+          errors[error.path[0] as string] = error.message;
+        }
+      });
+      setValidationErrors(errors);
+      return;
     }
 
     setSaving(true);
@@ -166,17 +192,13 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
   }
 
   return (
-    <div className="flex flex-col justify-between items-start align-middle gap-2 text-gray-200 mb-2 border rounded py-2 px-4">
+    <div className="flex flex-col justify-between items-start align-middle gap-2 mb-2 border rounded-sm py-2 px-4">
       {error && <ErrorMessage error={error} onClose={() => setError("")} />}
       <div className="w-full flex flex-row justify-start items-center align-middle gap-4">
-        <Button
-          variant={"outline"}
-          onClick={back}
-          className="w-6 h-6 self-center text-gray-200 hover:text-green-200 hover:cursor-pointer transition-colors duration-300 ease-in-out"
-        >
+        <button onClick={back} className="btn btn-secondary btn-sm">
           <Edit3 size={14} />
-        </Button>
-        <h2 className="text-gray-200 truncate">{diagram.title}</h2>
+        </button>
+        <h2 className="text-gray-200 max-w-40 truncate">{diagram.title}</h2>
       </div>
       <hr />
       <label htmlFor={`${diagram._id}-title`} className="hover:cursor-pointer">
@@ -191,22 +213,29 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
           onChange={(e) => setTitle(e.target.value)}
           className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
         />
+        {validationErrors.title && (
+          <p className="text-red-500 text-sm">{validationErrors.title}</p>
+        )}
       </label>
       <label
         htmlFor={`${diagram._id}-description`}
         className="hover:cursor-pointer"
       >
         <p className="block text-gray-400 text-sm m-2">Description:</p>
-        <input
+        <textarea
           id={`${diagram._id}-description`}
           name="description"
-          type="text"
           placeholder="description..."
+          cols={20}
+          rows={5}
           required
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
+          className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full resize"
         />
+        {validationErrors.description && (
+          <p className="text-red-500 text-sm">{validationErrors.description}</p>
+        )}
       </label>
       <div className="mt-2 w-full flex flex-row justify-start align-middle items-start gap-4">
         <label
@@ -267,13 +296,12 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
             }
             className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
           />
-          <Button
-            variant={"outline"}
+          <button
             onClick={() => removeResult(r.label)}
-            className="hover:cursor-pointer ml-2 text-red-400 hover:text-red-200 transition-colors duration-300 ease-in-out"
+            className="btn btn-error btn-sm"
           >
             <XCircle size={14} />
-          </Button>
+          </button>
         </div>
       ))}
       <div className="flex flex-row justify-center align-middle items-center mt-2">
@@ -308,33 +336,28 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
           onChange={(e) => setNewReference(e.target.value)}
           className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
         />
-        <Button
-          variant={"outline"}
-          onClick={addResult}
-          className="hover:cursor-pointer ml-2 text-green-400 hover:text-green-200 transition-colors duration-300 ease-in-out"
-        >
+        <button onClick={addResult} className="btn btn-success btn-sm">
           <Check size={14} />
-        </Button>
+        </button>
       </div>
 
       <div className="mt-2 w-full flex flex-row justify-around items-center align-middle">
-        <Button
-          variant={"outline"}
+        <button
           disabled={saving}
           onClick={handleSave}
-          className=" text-gray-200 hover:text-green-200 hover:cursor-pointer transition-colors duration-300 ease-in-out"
+          className="btn btn-primary"
         >
           {saving ? (
             <Loader className="animate-spin" size={14} />
           ) : (
             <Save size={14} />
           )}
-        </Button>
+        </button>
         <AlertMessage
           dialogOpen={deleteDialogOpen}
           setDialogOpen={setDeleteDialogOpen}
           title="Remove diagram?"
-          message={`Are you sure you want to delete the diagram &quot;{title}&quot;? This action cannot be undone.`}
+          message={`Are you sure you want to delete the diagram "${diagram.title}"? This action cannot be undone.`}
           confirmAction={confirmDelete}
         />
       </div>

@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import dbConnect from "../../../lib/db";
 import { User, Diagram } from "../../../lib/models";
 import { CreateDiagramInput } from "../../../lib/types/diagram";
+import { CreateDiagramValidationSchema } from "../../../lib/validations/diagram.validation";
 
 export async function GET(request: NextRequest) {
   try {
@@ -52,6 +53,16 @@ export async function POST(request: NextRequest) {
     }
 
     const body: CreateDiagramInput = await request.json();
+
+    // Validate the input
+    const validationResult = CreateDiagramValidationSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Validation failed", details: validationResult.error.issues },
+        { status: 400 }
+      );
+    }
+
     await dbConnect();
 
     const newDiagram = new Diagram({

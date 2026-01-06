@@ -30,14 +30,11 @@ const AlertMessage = ({
   return (
     <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <AlertDialogTrigger asChild>
-        <Button
-          variant={"outline"}
-          className="hover:cursor-pointer text-red-400 hover:text-red-200 transition-colors duration-300 ease-in-out"
-        >
+        <button className="btn btn-error">
           <XCircle size={14} />
-        </Button>
+        </button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="border border-gray-50">
+      <AlertDialogContent className="border border-gray-50 bg-gray-800">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-gray-200">{title}</AlertDialogTitle>
           <AlertDialogDescription className="text-gray-200">
@@ -45,15 +42,17 @@ const AlertMessage = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="text-gray-200">
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={confirmAction}
-            className="bg-red-600 hover:bg-red-700 text-gray-200"
-          >
-            Ok
-          </AlertDialogAction>
+          <div className="w-full flex flex-row justify-around items-center align-middle">
+            <AlertDialogCancel className="text-gray-200 bg-green-600 hover:text-gray-200 hover:bg-green-800">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmAction}
+              className="bg-red-600 hover:bg-red-700 text-gray-200"
+            >
+              Ok
+            </AlertDialogAction>
+          </div>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
