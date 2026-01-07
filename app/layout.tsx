@@ -4,6 +4,8 @@ import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner";
+import { ReactFlowProvider } from "@xyflow/react";
+import { FlowMachineProvider } from "@/contexts/flowMachineContext";
 
 const geist = localFont({
   src: "../public/fonts/Geist.ttf",
@@ -26,9 +28,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geist.className} ${geistMono.className} antialiased`}>
         <Providers>
-          <Navbar />
-          {children}
-          <Toaster position="top-center" richColors duration={3000} />
+          <ReactFlowProvider>
+            <FlowMachineProvider>
+              <Navbar />
+              {children}
+              <Toaster position="top-center" richColors duration={3000} />
+            </FlowMachineProvider>
+          </ReactFlowProvider>
         </Providers>
       </body>
     </html>

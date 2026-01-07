@@ -14,6 +14,7 @@ import {
   OutputNodeData,
   QuestionNodeData,
 } from "@/types/flow";
+import { useFlowMachine, useFlowSnapshot } from "@/contexts/flowMachineContext";
 
 type Props = {
   diagram: DiagramOutput;
@@ -28,6 +29,8 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
   const setViewport = useFlowStore((state) => state.setViewport);
   const setNodeSelected = useFlowStore((state) => state.setNodeSelected);
   const setEdgeSelected = useFlowStore((state) => state.setEdgeSelected);
+  const actorRef = useFlowMachine();
+  const snapshot = useFlowSnapshot();
 
   const buildNodes = (nodes: DiagramNode[]) => {
     const myNodes: MyNode[] = [];
@@ -98,12 +101,22 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
     setEdges(myEdges);
   };
 
+  const handleReset = () => {
+    if (snapshot.value === "completed") {
+      actorRef.send({ type: "RESET" });
+      useFlowStore.getState().setCurrentNodeId(null);
+      useFlowStore.getState().clearAnswers();
+      useFlowStore.getState().resetNodeStatuses();
+    }
+  };
+
   const selectDiagram = () => {
     setNodeSelected(null);
     setEdgeSelected(null);
     buildNodes(diagram.nodes);
     buildEdges(diagram.edges);
     setViewport(diagram.viewport as { x: number; y: number; zoom: number });
+    handleReset();
 
     setEditId(diagram._id);
   };
@@ -114,6 +127,7 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
     setNodes([]);
     setEdges([]);
     setViewport({ x: 0, y: 0, zoom: 1 });
+    handleReset();
 
     setEditId(null);
   };

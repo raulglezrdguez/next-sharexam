@@ -321,11 +321,11 @@ export default function Editor() {
       <Separator className="w-2 bg-gray-600 hover:bg-gray-500 transition-colors" />
       <Panel defaultSize={50} minSize={20}>
         <section className="h-full bg-black overflow-hidden">
-          <ReactFlowProvider>
-            <FlowMachineProvider>
-              <FlowWithExecution />
-            </FlowMachineProvider>
-          </ReactFlowProvider>
+          {/* <ReactFlowProvider>
+            <FlowMachineProvider> */}
+          <FlowWithExecution />
+          {/* </FlowMachineProvider>
+          </ReactFlowProvider> */}
         </section>
       </Panel>
       <Separator className="w-2 bg-gray-600 hover:bg-gray-500 transition-colors" />
