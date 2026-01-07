@@ -61,7 +61,7 @@ export function evaluateCondition(
   if (!condition) return true;
 
   try {
-    const scope = { answers: answers };
+    const scope = { ...answers };
 
     let result = safeMath.evaluate(condition, scope);
 
