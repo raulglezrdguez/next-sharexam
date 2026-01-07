@@ -38,7 +38,7 @@ export default async function Navbar() {
             await signIn("google");
           }}
         >
-          <button className="text-blue-500">Continue with Google</button>
+          <button className="btn btn-primary">Continue with Google</button>
         </form>
       )}
     </nav>
