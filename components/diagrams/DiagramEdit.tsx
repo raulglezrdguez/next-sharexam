@@ -21,6 +21,7 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
   const nodes = useFlowStore((state) => state.nodes);
   const edges = useFlowStore((state) => state.edges);
   const viewport = useFlowStore((state) => state.viewport);
+  const setFlowResults = useFlowStore((state) => state.setResults);
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -93,8 +94,9 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
         throw new Error(txt || "Error al guardar");
       }
 
-      toast.success(`Diagram "${title}" saved!`);
+      setFlowResults(results);
       refresh();
+      toast.success(`Diagram "${title}" saved!`);
     } catch (err: unknown) {
       setError((err as Error).message || String(err));
     } finally {

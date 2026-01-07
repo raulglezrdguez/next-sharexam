@@ -29,6 +29,7 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
   const setViewport = useFlowStore((state) => state.setViewport);
   const setNodeSelected = useFlowStore((state) => state.setNodeSelected);
   const setEdgeSelected = useFlowStore((state) => state.setEdgeSelected);
+  const setResults = useFlowStore((state) => state.setResults);
   const actorRef = useFlowMachine();
   const snapshot = useFlowSnapshot();
 
@@ -116,6 +117,7 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
     buildNodes(diagram.nodes);
     buildEdges(diagram.edges);
     setViewport(diagram.viewport as { x: number; y: number; zoom: number });
+    setResults(diagram.result || []);
     handleReset();
 
     setEditId(diagram._id);
@@ -127,6 +129,7 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
     setNodes([]);
     setEdges([]);
     setViewport({ x: 0, y: 0, zoom: 1 });
+    setResults([]);
     handleReset();
 
     setEditId(null);

@@ -8,6 +8,7 @@ import type {
   XYPosition,
 } from "@xyflow/react";
 import { getNodeDataByType } from "@/lib/nodeDataGenerator";
+import { ResultInput } from "@/lib/types/diagram";
 
 type FlowStore = {
   nodes: MyNode[];
@@ -18,6 +19,7 @@ type FlowStore = {
   nodeSelected: MyNode | null;
   edgeSelected: MyEdge | null;
   viewport: { x: number; y: number; zoom: number };
+  results: ResultInput[];
 
   // Acciones del diagrama
   setNodes: (nodes: MyNode[] | ((nds: MyNode[]) => MyNode[])) => void;
@@ -42,6 +44,7 @@ type FlowStore = {
 
   addNode: (params: { type: MyNodeType; position: XYPosition }) => void;
   setViewport: (viewport: { x: number; y: number; zoom: number }) => void;
+  setResults: (results: ResultInput[]) => void;
 };
 
 export const useFlowStore = create<FlowStore>()((set) => ({
@@ -53,6 +56,7 @@ export const useFlowStore = create<FlowStore>()((set) => ({
   nodeSelected: null,
   edgeSelected: null,
   viewport: { x: 0, y: 0, zoom: 1 },
+  results: [],
 
   setNodes: (nodes) =>
     set(
@@ -148,4 +152,6 @@ export const useFlowStore = create<FlowStore>()((set) => ({
     }),
 
   setViewport: (viewport) => set({ viewport }),
+
+  setResults: (results) => set({ results }),
 }));

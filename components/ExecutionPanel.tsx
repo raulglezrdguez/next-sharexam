@@ -5,6 +5,8 @@ import { useFlowMachine, useFlowSnapshot } from "@/contexts/flowMachineContext";
 import NodePalette from "./icons/NodePalette";
 import { RunNodeIcon } from "./icons/NodeIcons";
 import { RefreshCw } from "lucide-react";
+import { evaluateCondition } from "@/lib/evaluator";
+import { ResultInput } from "@/lib/types/diagram";
 
 export function ExecutionPanel() {
   const nodes = useFlowStore((state) => state.nodes);
@@ -59,6 +61,21 @@ export function ExecutionPanel() {
 
   // Estado completed: muestra resultados
   if (snapshot.value === "completed") {
+    const results = useFlowStore.getState().results;
+    const answers = useFlowStore.getState().answers;
+    const resultsToShow: ResultInput[] = [];
+    results.forEach((res) => {
+      if (res.value && res.label) {
+        if (evaluateCondition(res.value, answers)) {
+          resultsToShow.push({
+            label: res.label,
+            value: res.value,
+            reference: res.reference,
+          });
+        }
+      }
+    });
+
     return (
       <div id="execution-panel" className="p-4 bg-green-700 shadow-lg">
         <div className="flex flex-row justify-around items-center align-middle mb-4">
@@ -70,9 +87,31 @@ export function ExecutionPanel() {
             <RefreshCw size={24} />
           </button>
         </div>
-        <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-48 overflow-y-auto">
-          {JSON.stringify(useFlowStore.getState().answers, null, 2)}
-        </pre>
+
+        <div className="mb-2 p-2 bg-green-800 rounded">
+          <p className="font-semibold text-gray-200">Answers:</p>
+          <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto">
+            {JSON.stringify(useFlowStore.getState().answers, null, 2)}
+          </pre>
+        </div>
+        {resultsToShow.length > 0 && (
+          <div className="mt-4">
+            <h3 className="text-gray-200 font-bold mb-2">Results:</h3>
+            {resultsToShow.map((res, index) => (
+              <div key={index} className="mb-2 p-2 bg-green-800 rounded">
+                <p className="font-semibold text-gray-200">{res.label}:</p>
+                <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto">
+                  {JSON.stringify(res.value, null, 2)}
+                </pre>
+                {res.reference && (
+                  <p className="text-xs text-gray-300 mt-1">
+                    Reference: {res.reference}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
