@@ -25,6 +25,7 @@ export const nodeTypeDefaults: Record<MyNodeType, NodeTypeInfo> = {
       label: "API Call",
       endpoint: "https://api.ejemplo.com",
       method: "GET",
+      responseType: "text",
       status: "idle",
     },
   },

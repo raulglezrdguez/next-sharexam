@@ -75,7 +75,7 @@ const HttpNodeProperties = ({ data, id }: Props) => {
           name={"method"}
           value={method || "GET"}
           onChange={(e) => setMethod(e.target.value as HttpMethod)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
         >
           {HTTP_METHODS.map((method) => (
             <option key={method} value={method}>
@@ -92,7 +92,7 @@ const HttpNodeProperties = ({ data, id }: Props) => {
           name={"responseType"}
           value={responseType || "json"}
           onChange={(e) => setResponseType(e.target.value as ResponseType)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
         >
           {RESPONSE_TYPES.map((rt) => (
             <option key={rt} value={rt}>
