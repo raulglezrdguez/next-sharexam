@@ -105,13 +105,17 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
     setEditId(diagram._id);
   };
 
+  const unselectDiagram = () => {
+    setNodes([]);
+    setEdges([]);
+    setViewport({ x: 0, y: 0, zoom: 1 });
+
+    setEditId(null);
+  };
+
   if (editId === diagram._id) {
     return (
-      <DiagramEdit
-        diagram={diagram}
-        back={() => setEditId(null)}
-        refresh={refresh}
-      />
+      <DiagramEdit diagram={diagram} back={unselectDiagram} refresh={refresh} />
     );
   }
 
