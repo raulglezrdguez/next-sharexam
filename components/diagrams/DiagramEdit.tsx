@@ -2,7 +2,6 @@
 
 import { DiagramOutput, ResultInput } from "@/lib/types/diagram";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { Check, Edit3, Loader, Save, XCircle } from "lucide-react";
 import * as Switch from "@radix-ui/react-switch";
 import { toast } from "sonner";
@@ -170,13 +169,9 @@ const DiagramEdit = ({ diagram, back, refresh }: Props) => {
     return (
       <div className="flex flex-col justify-between items-start align-middle gap-2 text-gray-200 mb-2 border rounded py-2 px-4">
         <div className="w-full flex flex-row justify-start items-center align-middle gap-4">
-          <Button
-            variant={"outline"}
-            onClick={back}
-            className="w-6 h-6 self-center text-gray-200 hover:text-green-200 hover:cursor-pointer transition-colors duration-300 ease-in-out"
-          >
+          <button onClick={back} className="btn btn-secondary btn-sm">
             <Edit3 size={14} />
-          </Button>
+          </button>
           <h2 className="text-gray-200 truncate">{diagram.title}</h2>
         </div>
         <hr />
