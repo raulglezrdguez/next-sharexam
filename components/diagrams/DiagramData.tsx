@@ -14,7 +14,6 @@ import {
   OutputNodeData,
   QuestionNodeData,
 } from "@/types/flow";
-import { set } from "mongoose";
 
 type Props = {
   diagram: DiagramOutput;
@@ -27,6 +26,8 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
   const setNodes = useFlowStore((state) => state.setNodes);
   const setEdges = useFlowStore((state) => state.setEdges);
   const setViewport = useFlowStore((state) => state.setViewport);
+  const setNodeSelected = useFlowStore((state) => state.setNodeSelected);
+  const setEdgeSelected = useFlowStore((state) => state.setEdgeSelected);
 
   const buildNodes = (nodes: DiagramNode[]) => {
     const myNodes: MyNode[] = [];
@@ -98,6 +99,8 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
   };
 
   const selectDiagram = () => {
+    setNodeSelected(null);
+    setEdgeSelected(null);
     buildNodes(diagram.nodes);
     buildEdges(diagram.edges);
     setViewport(diagram.viewport as { x: number; y: number; zoom: number });
@@ -106,6 +109,8 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
   };
 
   const unselectDiagram = () => {
+    setNodeSelected(null);
+    setEdgeSelected(null);
     setNodes([]);
     setEdges([]);
     setViewport({ x: 0, y: 0, zoom: 1 });
