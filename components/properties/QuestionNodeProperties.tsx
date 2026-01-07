@@ -180,7 +180,7 @@ const QuestionNodeProperties = ({ data, id }: Props) => {
         </>
       )}
 
-      <button onClick={handleSave} className="w-24 self-center btn btn-primary">
+      <button onClick={handleSave} className="mt-4 self-center btn btn-primary">
         <Save size={14} />
       </button>
     </div>
