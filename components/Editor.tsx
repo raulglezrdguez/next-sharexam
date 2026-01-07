@@ -172,6 +172,7 @@ function FlowWithExecution() {
   const setEdgeSelected = useFlowStore((state) => state.setEdgeSelected);
   const edgeSelected = useFlowStore((state) => state.edgeSelected);
   const setViewport = useFlowStore((state) => state.setViewport);
+  const viewport = useFlowStore((state) => state.viewport);
 
   const onNodesChange = useFlowStore((state) => state.onNodesChange);
   const onEdgesChange = useFlowStore((state) => state.onEdgesChange);
@@ -251,6 +252,7 @@ function FlowWithExecution() {
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            viewport={viewport}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}

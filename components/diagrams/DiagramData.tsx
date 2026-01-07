@@ -1,8 +1,20 @@
 "use client";
 
-import { DiagramOutput } from "@/lib/types/diagram";
+import { DiagramEdge, DiagramNode, DiagramOutput } from "@/lib/types/diagram";
 import { Edit2 } from "lucide-react";
 import DiagramEdit from "./DiagramEdit";
+import { useFlowStore } from "@/store/flowStore";
+import {
+  GeminiInfoNodeData,
+  GeminiNodeData,
+  HttpNodeData,
+  InputNodeData,
+  MyEdge,
+  MyNode,
+  OutputNodeData,
+  QuestionNodeData,
+} from "@/types/flow";
+import { set } from "mongoose";
 
 type Props = {
   diagram: DiagramOutput;
@@ -12,6 +24,87 @@ type Props = {
 };
 
 const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
+  const setNodes = useFlowStore((state) => state.setNodes);
+  const setEdges = useFlowStore((state) => state.setEdges);
+  const setViewport = useFlowStore((state) => state.setViewport);
+
+  const buildNodes = (nodes: DiagramNode[]) => {
+    const myNodes: MyNode[] = [];
+    nodes.forEach((n) => {
+      switch (n.type) {
+        case "input":
+          myNodes.push({
+            id: n.id,
+            type: "input",
+            position: n.position,
+            data: n.data as InputNodeData,
+          });
+          break;
+        case "question":
+          myNodes.push({
+            id: n.id,
+            type: "question",
+            position: n.position,
+            data: n.data as QuestionNodeData,
+          });
+          break;
+        case "http-request":
+          myNodes.push({
+            id: n.id,
+            type: "http-request",
+            position: n.position,
+            data: n.data as HttpNodeData,
+          });
+          break;
+        case "output":
+          myNodes.push({
+            id: n.id,
+            type: "output",
+            position: n.position,
+            data: n.data as OutputNodeData,
+          });
+          break;
+        case "gemini":
+          myNodes.push({
+            id: n.id,
+            type: "gemini",
+            position: n.position,
+            data: n.data as GeminiNodeData,
+          });
+          break;
+        case "gemini-info":
+          myNodes.push({
+            id: n.id,
+            type: "gemini-info",
+            position: n.position,
+            data: n.data as GeminiInfoNodeData,
+          });
+          break;
+      }
+    });
+    setNodes(myNodes);
+  };
+
+  const buildEdges = (edges: DiagramEdge[]) => {
+    const myEdges: MyEdge[] = [];
+    edges.forEach((e) => {
+      const newEdge: MyEdge = { id: e.id, source: e.source, target: e.target };
+      if (e.data && e.data.condition) {
+        newEdge.data = { condition: e.data.condition as string };
+      }
+      myEdges.push(newEdge);
+    });
+    setEdges(myEdges);
+  };
+
+  const selectDiagram = () => {
+    buildNodes(diagram.nodes);
+    buildEdges(diagram.edges);
+    setViewport(diagram.viewport as { x: number; y: number; zoom: number });
+
+    setEditId(diagram._id);
+  };
+
   if (editId === diagram._id) {
     return (
       <DiagramEdit
@@ -25,10 +118,7 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
   return (
     <div className="flex flex-row justify-between items-center align-middle gap-2 text-gray-200 mb-2 border rounded py-2 px-4">
       <h2 className="max-w-40 text-sm truncate">{diagram.title}</h2>
-      <button
-        onClick={() => setEditId(diagram._id)}
-        className="btn btn-secondary btn-sm"
-      >
+      <button onClick={selectDiagram} className="btn btn-secondary btn-sm">
         <Edit2 size={14} />
       </button>
     </div>
