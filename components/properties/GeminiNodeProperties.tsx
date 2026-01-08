@@ -26,6 +26,15 @@ const GeminiNodeProperties = ({ data, id }: Props) => {
     if (data) update();
   }, [data]);
 
+  useEffect(() => {
+    const update = () => {
+      setNodeId(id);
+    };
+    if (id) {
+      update();
+    }
+  }, [id]);
+
   if (!data) return null;
 
   const handleSave = () => {
@@ -71,7 +80,7 @@ const GeminiNodeProperties = ({ data, id }: Props) => {
           name={"model"}
           value={model || GEMINI_MODELS[0]}
           onChange={(e) => setModel(e.target.value as GeminiModel)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
         >
           {GEMINI_MODELS.map((model) => (
             <option key={model} value={model}>

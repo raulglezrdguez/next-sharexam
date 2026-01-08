@@ -56,7 +56,7 @@ const QuestionForm = ({
                 });
               }
             }}
-            className="text-gray-800 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="text-gray-800 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoFocus
           >
             <option id="0">Selecciona una opción...</option>
@@ -71,7 +71,7 @@ const QuestionForm = ({
             type={currentQuestion.data.questionType}
             value={answer as string}
             onChange={(e) => setAnswer(e.target.value)}
-            className="text-gray-800 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="text-gray-800 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Escribe tu respuesta..."
             autoFocus
           />
@@ -80,7 +80,7 @@ const QuestionForm = ({
         <button
           onClick={handleSubmit}
           disabled={!answer}
-          className={`mt-4 w-full px-4 py-2 rounded-lg text-white ${
+          className={`mt-4 w-full px-4 py-2 rounded text-white ${
             answer
               ? "bg-blue-500 hover:bg-blue-600"
               : "bg-gray-300 cursor-not-allowed"

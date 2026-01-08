@@ -5,7 +5,7 @@ type Props = {
 
 export default function ErrorMessage({ error, onClose }: Props) {
   return (
-    <div className="relative max-w-96 mb-6 bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg">
+    <div className="relative max-w-96 mb-6 bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded">
       {onClose && (
         <button
           onClick={onClose}

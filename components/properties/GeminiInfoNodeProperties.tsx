@@ -1,7 +1,7 @@
 "use client";
 
 import { GeminiInfoNodeData } from "@/types/flow";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Save } from "lucide-react";
 import { useFlowStore } from "@/store/flowStore";
 
@@ -12,6 +12,15 @@ const GeminiInfoNodeProperties = ({ data, id }: Props) => {
 
   const [nodeId, setNodeId] = useState<string>(id || "");
   const [label, setLabel] = useState<string>(data?.label || "");
+
+  useEffect(() => {
+    const update = () => {
+      setNodeId(id);
+    };
+    if (id) {
+      update();
+    }
+  }, [id]);
 
   if (!data) return null;
 

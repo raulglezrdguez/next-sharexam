@@ -41,7 +41,7 @@ const GeminiInfoForm = ({
           type={"password"}
           value={geminiApiKey || ""}
           onChange={(e) => setGeminiApikey(e.target.value)}
-          className="text-gray-800 w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="text-gray-800 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="gemini apikey..."
           autoFocus
         />
@@ -49,7 +49,7 @@ const GeminiInfoForm = ({
         {/* <select
           value={model || ""}
           onChange={(e) => setModel(e.target.value as GeminiModel)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           {GEMINI_MODELS.map((model) => (
             <option key={model} value={model}>
@@ -61,7 +61,7 @@ const GeminiInfoForm = ({
         <button
           onClick={handleSubmit}
           disabled={!geminiApiKey}
-          className={`mt-4 w-full px-4 py-2 rounded-lg text-white ${
+          className={`mt-4 w-full px-4 py-2 rounded text-white ${
             geminiApiKey
               ? "bg-blue-500 hover:bg-blue-600"
               : "bg-gray-300 cursor-not-allowed"

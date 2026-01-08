@@ -28,6 +28,7 @@ interface MyNodeDataRoot extends Record<string, unknown> {
 
 export interface QuestionNodeData extends MyNodeDataRoot {
   question: string;
+  valid: string;
   questionType: QuestionType;
   options?: QuestionOption[];
   status?: NodeStatus;

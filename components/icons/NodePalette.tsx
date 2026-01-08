@@ -31,7 +31,7 @@ export default function NodePalette(): JSX.Element {
   const onDragEnd = () => {};
 
   return (
-    <div className="p-4 border border-gray-500 rounded-lg">
+    <div className="p-4 border border-gray-500 rounded">
       <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
         <div
           draggable

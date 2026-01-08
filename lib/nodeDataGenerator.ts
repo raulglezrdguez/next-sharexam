@@ -15,6 +15,7 @@ export const nodeTypeDefaults: Record<MyNodeType, NodeTypeInfo> = {
     defaultData: {
       label: "Question",
       question: "Question?",
+      valid: "",
       questionType: "text",
       status: "idle",
     },

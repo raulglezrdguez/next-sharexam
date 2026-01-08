@@ -9,6 +9,8 @@ import {
 import { useEffect, useState } from "react";
 import { Save, XCircle, Check } from "lucide-react";
 import { useFlowStore } from "@/store/flowStore";
+import { isValidJavaScriptExpression } from "@/lib/utils";
+import { toast } from "sonner";
 
 type Props = { data: QuestionNodeData | null; id: string };
 
@@ -17,6 +19,7 @@ const QuestionNodeProperties = ({ data, id }: Props) => {
 
   const [nodeId, setNodeId] = useState<string>(id || "");
   const [question, setQuestion] = useState<string>(data?.question || "");
+  const [valid, setValid] = useState<string>(data?.valid || "");
   const [questionType, setQuestionType] = useState<string>(
     data?.questionType || ""
   );
@@ -27,16 +30,35 @@ const QuestionNodeProperties = ({ data, id }: Props) => {
   useEffect(() => {
     const update = () => {
       setQuestion(data?.question || "");
+      setValid(data?.valid || "");
       setQuestionType(data?.questionType || "");
       setOptions(data?.options || []);
     };
     if (data) update();
   }, [data]);
 
+  useEffect(() => {
+    const update = () => {
+      setNodeId(id);
+    };
+    if (id) {
+      update();
+    }
+  }, [id]);
+
   if (!data) return null;
 
   const handleSave = () => {
-    updateNodeData(id, nodeId, { question, questionType, options });
+    if (valid.trim() !== "") {
+      const { error } = isValidJavaScriptExpression(valid);
+
+      if (error) {
+        toast.error("Valid field is invalid");
+        return;
+      }
+    }
+
+    updateNodeData(id, nodeId, { question, valid, questionType, options });
   };
 
   const setOption = (id: string, newId: string, newValue: string) => {
@@ -93,6 +115,23 @@ const QuestionNodeProperties = ({ data, id }: Props) => {
           className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
         />
       </label>
+      <label htmlFor="valid" className="hover:cursor-pointer">
+        <p className="block text-gray-400 text-sm m-2">Valid:</p>
+        <input
+          id="valid"
+          name="valid"
+          type="text"
+          placeholder={
+            questionType === "select"
+              ? `${nodeId}.id == 1 & ${nodeId}.value != 2...`
+              : "id == 1 & value != 2"
+          }
+          required
+          value={valid}
+          onChange={(e) => setValid(e.target.value)}
+          className="text-sm text-gray-200 focus:ring-gray-500 border-gray-300 rounded p-2 w-full"
+        />
+      </label>
 
       <label htmlFor="questionType" className="hover:cursor-pointer">
         <p className="block text-gray-400 text-sm m-2">Question type:</p>
@@ -101,7 +140,7 @@ const QuestionNodeProperties = ({ data, id }: Props) => {
           name={"questionType"}
           value={questionType || ""}
           onChange={(e) => setQuestionType(e.target.value as QuestionType)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
+          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
         >
           {QUESTION_TYPES.map((qt) => (
             <option key={qt} value={qt}>

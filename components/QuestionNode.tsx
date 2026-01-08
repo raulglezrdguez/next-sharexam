@@ -33,6 +33,7 @@ export function QuestionNode({ data, id }: NodeProps<MyNode>) {
     >
       <div className={`flex flex-col justify-center`}>
         <div className="text-lg font-semibold truncate">{id}</div>
+
         <div className="text-sm font-semibold truncate">{nodeData.label}</div>
 
         <div className="text-sm font-semibold truncate">

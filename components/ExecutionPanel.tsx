@@ -29,7 +29,7 @@ export function ExecutionPanel() {
     return (
       <div
         id="execution-panel"
-        className="flex flex-row justify-center items-center align-middle gap-2 p-4 bg-gray-200 shadow-lg rounded-lg"
+        className="flex flex-row justify-center items-center align-middle gap-2 p-4 bg-gray-200 shadow-lg rounded"
       >
         <NodePalette />
 
@@ -51,7 +51,7 @@ export function ExecutionPanel() {
   if (snapshot.value && JSON.stringify(snapshot.value).includes("running")) {
     // No renderizar nada - el modal aparece automáticamente cuando detecta una pregunta
     return (
-      <div id="execution-panel" className="p-4 bg-blue-50 shadow-lg rounded-lg">
+      <div id="execution-panel" className="p-4 bg-blue-50 shadow-lg rounded">
         <p className="text-sm text-blue-700">
           ⏳ Ejecutando nodo: {snapshot.context.currentNodeId || "Iniciando..."}
         </p>
@@ -76,6 +76,36 @@ export function ExecutionPanel() {
       }
     });
 
+    const answersToShow: {
+      valid: boolean;
+      id: string;
+      answer: Record<string, unknown>;
+    }[] = [];
+    Object.keys(answers).forEach((value) => {
+      const n = nodes.find((n) => n.id === value);
+      if (n && n.data?.valid !== "") {
+        if (evaluateCondition(n.data.valid as string, answers)) {
+          answersToShow.push({
+            valid: true,
+            id: value,
+            answer: answers[value] as Record<string, unknown>,
+          });
+        } else {
+          answersToShow.push({
+            valid: false,
+            id: value,
+            answer: answers[value] as Record<string, unknown>,
+          });
+        }
+      } else {
+        answersToShow.push({
+          valid: false,
+          id: value,
+          answer: answers[value] as Record<string, unknown>,
+        });
+      }
+    });
+
     return (
       <div id="execution-panel" className="p-4 bg-green-700 shadow-lg">
         <div className="flex flex-row justify-around items-center align-middle mb-4">
@@ -88,28 +118,70 @@ export function ExecutionPanel() {
           </button>
         </div>
 
-        <div className="mb-2 p-2 bg-green-800 rounded">
-          <p className="font-semibold text-gray-200">Answers:</p>
-          <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto">
-            {JSON.stringify(useFlowStore.getState().answers, null, 2)}
-          </pre>
-        </div>
+        {answersToShow.length > 0 && (
+          <div className="mt-4">
+            <h3 className="text-gray-200 font-bold mb-2">Answers:</h3>
+            <div className="max-h-42 overflow-y-auto">
+              {answersToShow.map((res, index) => (
+                <div key={index} className="mb-2 p-2 bg-green-800 rounded">
+                  <p className="font-semibold text-gray-200">{res.id}</p>
+                  <pre
+                    className={`text-xs text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto ${
+                      res.valid ? "bg-green-900" : "bg-red-900"
+                    }`}
+                  >
+                    {JSON.stringify(res.answer, null, 2)}
+                  </pre>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {resultsToShow.length > 0 && (
           <div className="mt-4">
             <h3 className="text-gray-200 font-bold mb-2">Results:</h3>
-            {resultsToShow.map((res, index) => (
-              <div key={index} className="mb-2 p-2 bg-green-800 rounded">
-                <p className="font-semibold text-gray-200">{res.label}:</p>
-                <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto">
-                  {JSON.stringify(res.value, null, 2)}
-                </pre>
-                {res.reference && (
-                  <p className="text-xs text-gray-300 mt-1">
-                    Reference: {res.reference}
-                  </p>
-                )}
-              </div>
-            ))}
+            <div className="max-h-42 overflow-y-auto">
+              {resultsToShow.map((res, index) => (
+                <div key={index} className="mb-2 p-2 bg-green-800 rounded">
+                  <p className="font-semibold text-gray-200">{res.label}:</p>
+                  <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto">
+                    {JSON.stringify(res.value, null, 2)}
+                  </pre>
+                  {res.reference && (
+                    <p className="text-xs text-gray-300 mt-1">
+                      Reference: {res.reference}
+                    </p>
+                  )}
+                </div>
+              ))}
+              {resultsToShow.map((res, index) => (
+                <div key={index} className="mb-2 p-2 bg-green-800 rounded">
+                  <p className="font-semibold text-gray-200">{res.label}:</p>
+                  <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto">
+                    {JSON.stringify(res.value, null, 2)}
+                  </pre>
+                  {res.reference && (
+                    <p className="text-xs text-gray-300 mt-1">
+                      Reference: {res.reference}
+                    </p>
+                  )}
+                </div>
+              ))}
+              {resultsToShow.map((res, index) => (
+                <div key={index} className="mb-2 p-2 bg-green-800 rounded">
+                  <p className="font-semibold text-gray-200">{res.label}:</p>
+                  <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto">
+                    {JSON.stringify(res.value, null, 2)}
+                  </pre>
+                  {res.reference && (
+                    <p className="text-xs text-gray-300 mt-1">
+                      Reference: {res.reference}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
