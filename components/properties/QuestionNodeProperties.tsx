@@ -101,7 +101,7 @@ const QuestionNodeProperties = ({ data, id }: Props) => {
           name={"questionType"}
           value={questionType || ""}
           onChange={(e) => setQuestionType(e.target.value as QuestionType)}
-          className="w-full text-gray-200 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
         >
           {QUESTION_TYPES.map((qt) => (
             <option key={qt} value={qt}>
