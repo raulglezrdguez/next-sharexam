@@ -53,6 +53,8 @@ export function HttpNode({ data, id }: NodeProps<MyNode>) {
       className={`relative min-w-48 px-4 py-3 rounded-xl ${nodeBorder} shadow-md ${statusStyles[status]}`}
     >
       <div className={`flex flex-col justify-center`}>
+        <div className="text-lg font-semibold truncate">{id}</div>
+
         <div className="text-sm font-semibold truncate">
           🌐 {nodeData.label}
         </div>
