@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+
 import { auth } from "@/auth";
 import dbConnect from "../../../lib/db";
 import { User, Diagram } from "../../../lib/models";
@@ -9,7 +11,21 @@ export async function GET(request: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session?.user?.id) {
+    let token = null;
+    if (!session) {
+      token = await getToken({
+        req: request,
+        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+        salt:
+          process.env.NODE_ENV === "production"
+            ? "__Secure-authjs.session-token"
+            : "authjs.session-token",
+      });
+    }
+
+    const user = session?.user || token;
+
+    if (!user || !user.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -26,7 +42,7 @@ export async function GET(request: NextRequest) {
     } else if (author) {
       query.author = author;
     } else {
-      query.author = session.user.id;
+      query.author = user.id as string;
     }
 
     const diagrams = await Diagram.find(query)
@@ -48,7 +64,21 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session?.user?.id) {
+    let token = null;
+    if (!session) {
+      token = await getToken({
+        req: request,
+        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+        salt:
+          process.env.NODE_ENV === "production"
+            ? "__Secure-authjs.session-token"
+            : "authjs.session-token",
+      });
+    }
+
+    const user = session?.user || token;
+
+    if (!user || !user.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -67,7 +97,7 @@ export async function POST(request: NextRequest) {
 
     const newDiagram = new Diagram({
       ...body,
-      author: session.user.id,
+      author: user.id as string,
     });
 
     await newDiagram.save();

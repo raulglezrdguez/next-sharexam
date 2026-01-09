@@ -6,6 +6,8 @@ import clientPromise from "./lib/mongoDBClient";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
+  session: { strategy: "jwt" },
+  secret: process.env.AUTH_SECRET,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -24,6 +26,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      // user viene de mongodb
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+        token.status = user.status;
+      }
+      return token;
+    },
     async session({ session, user }) {
       // user viene de mongodb
       if (session.user) {

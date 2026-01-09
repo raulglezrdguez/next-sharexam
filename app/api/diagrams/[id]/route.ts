@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+
 import { auth } from "@/auth";
 import dbConnect from "../../../../lib/db";
 import { User, Diagram } from "../../../../lib/models";
@@ -15,7 +17,18 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const session = await auth();
 
-    if (!session?.user?.id) {
+    let token = null;
+    if (!session) {
+      token = await getToken({
+        req: request,
+        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+        salt: process.env.NODE_ENV === "production" ? "__Secure-authjs.session-token" : "authjs.session-token",
+      });
+    }
+
+    const user = session?.user || token;
+
+    if (!user || !user.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -30,7 +43,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     // Solo el autor o diagramas públicos pueden ver
-    if (diagram.author._id.toString() !== session.user.id && !diagram.public) {
+    if (diagram.author._id.toString() !== user.id && !diagram.public) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -48,7 +61,18 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const session = await auth();
 
-    if (!session?.user?.id) {
+    let token = null;
+    if (!session) {
+      token = await getToken({
+        req: request,
+        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+        salt: process.env.NODE_ENV === "production" ? "__Secure-authjs.session-token" : "authjs.session-token",
+      });
+    }
+
+    const user = session?.user || token;
+
+    if (!user || !user.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -74,7 +98,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     // Solo el autor puede modificar
-    if (diagram.author.toString() !== session.user.id) {
+    if (diagram.author.toString() !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -108,7 +132,18 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const session = await auth();
 
-    if (!session?.user?.id) {
+    let token = null;
+    if (!session) {
+      token = await getToken({
+        req: request,
+        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+        salt: process.env.NODE_ENV === "production" ? "__Secure-authjs.session-token" : "authjs.session-token",
+      });
+    }
+
+    const user = session?.user || token;
+
+    if (!user || !user.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -123,7 +158,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     // Solo el autor puede eliminar
-    if (diagram.author.toString() !== session.user.id) {
+    if (diagram.author.toString() !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
