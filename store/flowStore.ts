@@ -15,7 +15,7 @@ type FlowStore = {
   edges: MyEdge[];
   answers: Record<string, unknown>;
   currentNodeId: string | null;
-  executionStatus: "idle" | "running" | "paused" | "completed";
+  executionStatus: "idle" | "running" | "paused" | "completed" | "stopped";
   nodeSelected: MyNode | null;
   edgeSelected: MyEdge | null;
   viewport: { x: number; y: number; zoom: number };
@@ -34,7 +34,7 @@ type FlowStore = {
   clearAnswers: () => void;
   resetNodeStatuses: () => void;
   setExecutionStatus: (
-    status: "idle" | "running" | "paused" | "completed"
+    status: "idle" | "running" | "paused" | "completed" | "stopped"
   ) => void;
   setNodeSelected: (node: MyNode | null) => void;
   setEdgeSelected: (node: MyEdge | null) => void;

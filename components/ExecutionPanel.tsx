@@ -16,7 +16,8 @@ export function ExecutionPanel() {
   const startNode = nodes.find((n) => n.type === "input");
 
   const handleReset = () => {
-    if (snapshot.value === "completed") {
+    console.log(snapshot.value);
+    if (snapshot.value === "completed" || snapshot.value === "stopped") {
       actorRef.send({ type: "RESET" });
       useFlowStore.getState().setCurrentNodeId(null);
       useFlowStore.getState().clearAnswers();
@@ -24,6 +25,9 @@ export function ExecutionPanel() {
     }
   };
 
+  console.log(snapshot.value);
+  console.log(useFlowStore.getState().answers);
+  console.log(useFlowStore.getState().currentNodeId);
   // Estado idle: muestra botón de inicio
   if (snapshot.value === "idle") {
     return (
@@ -60,9 +64,9 @@ export function ExecutionPanel() {
   }
 
   // Estado completed: muestra resultados
-  if (snapshot.value === "completed") {
+  if (snapshot.value === "completed" || snapshot.value === "stopped") {
     const results = useFlowStore.getState().results;
-    const answers = useFlowStore.getState().answers;
+    const answers = useFlowStore.getState().answers || {};
     const resultsToShow: ResultInput[] = [];
     results.forEach((res) => {
       if (res.value && res.label) {

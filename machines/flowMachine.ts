@@ -12,7 +12,8 @@ type FlowEvent =
   | { type: "START" }
   | { type: "ANSWER"; nodeId: string; answer: unknown }
   | { type: "COMPLETE" }
-  | { type: "RESET" };
+  | { type: "RESET" }
+  | { type: "STOP" };
 
 const httpActor = fromPromise(
   async ({
@@ -98,12 +99,19 @@ export const flowMachine = createMachine(
     },
 
     context: () => ({
-      currentNodeId: null,
+      currentNodeId: useFlowStore.getState().currentNodeId,
     }),
 
     states: {
       idle: {
-        on: { START: "running" },
+        on: {
+          START: {
+            target: "running",
+            actions: assign({
+              currentNodeId: useFlowStore.getState().currentNodeId,
+            }),
+          },
+        },
       },
 
       running: {
@@ -118,6 +126,7 @@ export const flowMachine = createMachine(
               { target: "processingHttp", guard: "isHttpNode" },
               { target: "processingGemini", guard: "isGeminiNode" },
               { target: "#flowExecution.completed", guard: "noMoreNodes" },
+              { target: "#flowExecution.stopped", guard: "isStopped" },
             ],
           },
 
@@ -135,6 +144,9 @@ export const flowMachine = createMachine(
                   },
                   "markNodeAsExecuted",
                 ],
+              },
+              STOP: {
+                target: "#flowExecution.stopped",
               },
             },
           },
@@ -228,10 +240,18 @@ export const flowMachine = createMachine(
             entry: ["markNodeAsExecuted"],
             always: "evaluating",
           },
+
+          stopped: {
+            always: "#flowExecution.stopped",
+          },
         },
       },
 
       completed: {
+        on: { RESET: "idle" },
+      },
+
+      stopped: {
         on: { RESET: "idle" },
       },
     },
@@ -270,6 +290,11 @@ export const flowMachine = createMachine(
       },
       noMoreNodes: ({ context }) => {
         return context.currentNodeId === null;
+      },
+      isStopped: ({ context, event }) => {
+        if (event.type !== "STOP") return false;
+        context.currentNodeId = null;
+        return true;
       },
     },
 

@@ -103,6 +103,7 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
   };
 
   const handleReset = () => {
+    console.log(snapshot.value);
     if (snapshot.value === "completed") {
       actorRef.send({ type: "RESET" });
       useFlowStore.getState().setCurrentNodeId(null);

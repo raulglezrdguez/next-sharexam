@@ -7,7 +7,6 @@ import {
   BackgroundVariant,
   MiniMap,
   useReactFlow,
-  addEdge,
 } from "@xyflow/react";
 import { Panel, Group, Separator } from "react-resizable-panels";
 

@@ -13,10 +13,6 @@ const GeminiInfoForm = ({
   const actorRef = useFlowMachine();
   const [geminiApiKey, setGeminiApikey] = useState<string>("");
 
-  // const [model, setModel] = useState<GeminiModel | null>(
-  //   localStorage.getItem("gemini-model") as GeminiModel
-  // );
-
   const handleSubmit = () => {
     if (!geminiApiKey.trim()) return;
 
@@ -28,6 +24,10 @@ const GeminiInfoForm = ({
       nodeId: currentQuestion.id,
       answer: null,
     });
+  };
+
+  const handleStop = () => {
+    actorRef.send({ type: "STOP" });
   };
 
   return (
@@ -58,17 +58,23 @@ const GeminiInfoForm = ({
           ))}
         </select> */}
 
-        <button
-          onClick={handleSubmit}
-          disabled={!geminiApiKey}
-          className={`mt-4 w-full px-4 py-2 rounded text-white ${
-            geminiApiKey
-              ? "bg-blue-500 hover:bg-blue-600"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-        >
-          Update
-        </button>
+        <div className="mt-4 flex flex-row justify-between items-center align-middle">
+          <button
+            onClick={handleSubmit}
+            disabled={!geminiApiKey}
+            className={`mt-4 w-full px-4 py-2 rounded text-white ${
+              geminiApiKey
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-gray-300 cursor-not-allowed"
+            }`}
+          >
+            Update
+          </button>
+
+          <button onClick={handleStop} className="btn btn-error">
+            Stop
+          </button>
+        </div>
       </div>
     </div>
   );

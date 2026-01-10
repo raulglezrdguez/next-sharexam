@@ -26,6 +26,10 @@ const QuestionForm = ({
     setAnswer("");
   };
 
+  const handleStop = () => {
+    actorRef.send({ type: "STOP" });
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-xl p-6 w-96 shadow-2xl">
@@ -77,17 +81,23 @@ const QuestionForm = ({
           />
         )}
 
-        <button
-          onClick={handleSubmit}
-          disabled={!answer}
-          className={`mt-4 w-full px-4 py-2 rounded text-white ${
-            answer
-              ? "bg-blue-500 hover:bg-blue-600"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-        >
-          Enviar Respuesta
-        </button>
+        <div className="mt-4 flex flex-row justify-between items-center align-middle">
+          <button
+            onClick={handleSubmit}
+            disabled={!answer}
+            className={`px-4 py-2 rounded text-white ${
+              answer
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-gray-300 cursor-not-allowed"
+            }`}
+          >
+            Send
+          </button>
+
+          <button onClick={handleStop} className="btn btn-error">
+            Stop
+          </button>
+        </div>
       </div>
     </div>
   );

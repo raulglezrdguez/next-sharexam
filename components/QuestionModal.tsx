@@ -27,7 +27,6 @@ export function QuestionModal() {
 
   if (!isWaiting || !nodeId) return null;
 
-  // Tomamos el nodo actualizado desde Zustand para asegurar datos frescos
   const node = nodes.find((n: MyNode) => n.id === nodeId);
   if (!node) return null;
 
