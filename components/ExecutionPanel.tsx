@@ -16,7 +16,6 @@ export function ExecutionPanel() {
   const startNode = nodes.find((n) => n.type === "input");
 
   const handleReset = () => {
-    console.log(snapshot.value);
     if (snapshot.value === "completed" || snapshot.value === "stopped") {
       actorRef.send({ type: "RESET" });
       useFlowStore.getState().setCurrentNodeId(null);
@@ -25,9 +24,6 @@ export function ExecutionPanel() {
     }
   };
 
-  console.log(snapshot.value);
-  console.log(useFlowStore.getState().answers);
-  console.log(useFlowStore.getState().currentNodeId);
   // Estado idle: muestra botón de inicio
   if (snapshot.value === "idle") {
     return (
