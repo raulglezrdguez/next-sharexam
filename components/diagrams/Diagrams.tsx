@@ -7,7 +7,7 @@ import DiagramData from "./DiagramData";
 import DiagramCreate from "./DiagramCreate";
 
 const Diagrams = () => {
-  const [publicDiagrams, setPublicDiagrams] = useState<boolean>(false);
+  const [publicDiagrams, setPublicDiagrams] = useState<boolean>(true);
   const [diagrams, setDiagrams] = useState<DiagramOutput[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
 

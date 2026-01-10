@@ -25,11 +25,16 @@ export async function GET(request: NextRequest) {
 
     const user = session?.user || token;
 
-    if (!user || !user.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     await dbConnect();
+
+    if (!user || !user.id) {
+      const diagrams = await Diagram.find({ public: true })
+        .populate("author", "name email")
+        .sort({ updatedAt: -1 })
+        .lean();
+
+      return NextResponse.json({ diagrams, totalCount: diagrams.length });
+    }
 
     const { searchParams } = new URL(request.url);
     const author = searchParams.get("author");
