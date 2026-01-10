@@ -7,12 +7,11 @@ import {
   BackgroundVariant,
   MiniMap,
   useReactFlow,
-  ReactFlowProvider,
+  addEdge,
 } from "@xyflow/react";
 import { Panel, Group, Separator } from "react-resizable-panels";
 
 import { useFlowStore } from "@/store/flowStore";
-import { FlowMachineProvider } from "@/contexts/flowMachineContext";
 import { ExecutionPanel } from "@/components/ExecutionPanel";
 import { QuestionNode } from "@/components/QuestionNode";
 import { HttpNode } from "@/components/HttpNode";
@@ -228,6 +227,16 @@ function FlowWithExecution() {
         x: e.clientX,
         y: e.clientY,
       });
+
+      if (type === "gemini") {
+        const gi = nodes.find((n) => n.type === "gemini-info");
+        if (!gi) {
+          addNode({
+            type: "gemini-info",
+            position: { x: position.x, y: position.y - 100 },
+          });
+        }
+      }
 
       addNode({ type, position });
     },
