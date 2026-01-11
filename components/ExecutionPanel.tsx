@@ -155,32 +155,6 @@ export function ExecutionPanel() {
                   )}
                 </div>
               ))}
-              {resultsToShow.map((res, index) => (
-                <div key={index} className="mb-2 p-2 bg-green-800 rounded">
-                  <p className="font-semibold text-gray-200">{res.label}:</p>
-                  <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto">
-                    {JSON.stringify(res.value, null, 2)}
-                  </pre>
-                  {res.reference && (
-                    <p className="text-xs text-gray-300 mt-1">
-                      Reference: {res.reference}
-                    </p>
-                  )}
-                </div>
-              ))}
-              {resultsToShow.map((res, index) => (
-                <div key={index} className="mb-2 p-2 bg-green-800 rounded">
-                  <p className="font-semibold text-gray-200">{res.label}:</p>
-                  <pre className="text-xs bg-green-900 text-gray-100 p-2 rounded text-wrap max-h-32 overflow-y-auto">
-                    {JSON.stringify(res.value, null, 2)}
-                  </pre>
-                  {res.reference && (
-                    <p className="text-xs text-gray-300 mt-1">
-                      Reference: {res.reference}
-                    </p>
-                  )}
-                </div>
-              ))}
             </div>
           </div>
         )}
