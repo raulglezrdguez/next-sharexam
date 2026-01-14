@@ -29,8 +29,8 @@ A robust, type-safe web application built with Next.js 16, featuring authenticat
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
-cd <project-directory>
+git clone https://github.com/raulglezrdguez/next-sharexam.git
+cd next-sharexam
 ```
 
 ### 2. Install dependencies
