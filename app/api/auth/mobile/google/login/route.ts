@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     if (!payload || !payload.email) {
       return NextResponse.json(
         { error: "Invalid Google Token" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
       success: true,
       token: token,
       user: {
+        id: payload.sub,
         name: payload.name,
         email: payload.email,
         image: payload.picture,
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
     console.error("Google Exchange Error:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
