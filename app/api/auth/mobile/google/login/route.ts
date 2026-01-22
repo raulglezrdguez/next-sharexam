@@ -9,10 +9,13 @@ export async function POST(req: NextRequest) {
   try {
     const { idToken } = await req.json();
 
-    // 1. Verify the ID Token with Google
     const ticket = await client.verifyIdToken({
       idToken,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: [
+        process.env.GOOGLE_CLIENT_ID || "",
+        process.env.ANDROID_CLIENT_ID || "",
+        // process.env.IOS_CLIENT_ID || "",
+      ],
     });
 
     const payload = ticket.getPayload();
@@ -23,10 +26,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Log into Auth.js using the verified email
-    // We use the 'credentials' provider as a bridge
     await signIn("credentials", {
-      isGoogleLogin: "true", // Custom flag for your authorize function
+      isGoogleLogin: "true",
       name: payload.name,
       email: payload.email,
       image: payload.picture,
@@ -34,7 +35,6 @@ export async function POST(req: NextRequest) {
       redirect: false,
     });
 
-    // 3. Extract the session cookie Auth.js just created
     const sessionCookieName =
       process.env.NODE_ENV === "production"
         ? "__Secure-authjs.session-token"
