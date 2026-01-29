@@ -108,7 +108,6 @@ const puterActor = fromPromise(
 
       return response.message?.content || response;
     } catch (err) {
-      console.log(err);
       throw new Error(
         `Puter error: ${(err as { success: boolean; error: string }).error}`,
       );

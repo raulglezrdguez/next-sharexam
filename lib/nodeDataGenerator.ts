@@ -46,7 +46,7 @@ export const nodeTypeDefaults: Record<MyNodeType, NodeTypeInfo> = {
   puter: {
     type: "puter",
     defaultData: {
-      label: "Puter service",
+      label: "AI service",
       prompt: "Prompt...",
       model: "gpt-5-nano",
     },

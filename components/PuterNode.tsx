@@ -34,7 +34,7 @@ export function PuterNode({ data, id }: NodeProps<MyNode>) {
         <div className="text-lg font-semibold truncate">{id}</div>
 
         <div className="text-sm font-semibold truncate">
-          ✨ {nodeData.label}
+          ☁️ {nodeData.label}
         </div>
 
         <div className="mt-2 text-xs max-w-56 line-clamp-2">

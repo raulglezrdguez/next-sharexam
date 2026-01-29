@@ -66,10 +66,7 @@ export const GeminiServiceNodeIcon = () => (
 
 // 5. Nodo de Gemini (Servicio Generativelanguage)
 export const PuterServiceNodeIcon = () => (
-  <NodeIconWrapper
-    color="linear-gradient(135deg, #358a4f, #27a455)"
-    label="Puter"
-  >
+  <NodeIconWrapper color="linear-gradient(135deg, #358a4f, #27a455)" label="AI">
     <Cloud {...iconStyle} />
   </NodeIconWrapper>
 );
