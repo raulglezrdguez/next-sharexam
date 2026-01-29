@@ -3,6 +3,7 @@ import { createMachine, assign, fromPromise } from "xstate";
 import type { MyNode, MyEdge } from "@/types/flow";
 import { useFlowStore } from "@/store/flowStore";
 import { evaluateCondition } from "@/lib/evaluator";
+import puter from "@heyputer/puter.js";
 
 interface FlowContext {
   currentNodeId: string | null;
@@ -28,7 +29,7 @@ const httpActor = fromPromise(
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return input.responseType === "text" ? response.text() : response.json();
-  }
+  },
 );
 
 const geminiActor = fromPromise(
@@ -72,19 +73,47 @@ const geminiActor = fromPromise(
             temperature: input.temperature ?? 1.0,
           },
         }),
-      }
+      },
     );
 
     if (!response.ok) {
       const error = await response.json();
       throw new Error(
-        `Gemini API error: ${error.error?.message || response.statusText}`
+        `Gemini API error: ${error.error?.message || response.statusText}`,
       );
     }
 
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
-  }
+  },
+);
+
+const puterActor = fromPromise(
+  async ({
+    input,
+  }: {
+    input: {
+      prompt: string;
+      model: string;
+      answers: Record<string, unknown>;
+    };
+  }) => {
+    try {
+      const template = Handlebars.compile(input.prompt);
+      const filledPrompt = template(input.answers);
+
+      const response = await puter.ai.chat(filledPrompt, {
+        model: input.model,
+      });
+
+      return response.message?.content || response;
+    } catch (err) {
+      console.log(err);
+      throw new Error(
+        `Puter error: ${(err as { success: boolean; error: string }).error}`,
+      );
+    }
+  },
 );
 
 export const flowMachine = createMachine(
@@ -125,6 +154,7 @@ export const flowMachine = createMachine(
               { target: "waitingInput", guard: "isQuestionNode" },
               { target: "processingHttp", guard: "isHttpNode" },
               { target: "processingGemini", guard: "isGeminiNode" },
+              { target: "processingPuter", guard: "isPuterNode" },
               { target: "#flowExecution.completed", guard: "noMoreNodes" },
               { target: "#flowExecution.stopped", guard: "isStopped" },
             ],
@@ -236,6 +266,48 @@ export const flowMachine = createMachine(
             },
           },
 
+          processingPuter: {
+            invoke: {
+              src: puterActor,
+              input: ({ context }) => {
+                const node = useFlowStore
+                  .getState()
+                  .nodes.find((n) => n.id === context.currentNodeId);
+                if (!node || node.type !== "puter")
+                  throw new Error("Invalid node");
+                return {
+                  prompt: node.data.prompt,
+                  model: node.data.model,
+                  answers: useFlowStore.getState().answers,
+                };
+              },
+              onDone: {
+                target: "evaluating",
+                actions: [
+                  ({ context, event }) => {
+                    useFlowStore
+                      .getState()
+                      .setAnswer(context.currentNodeId as string, event.output);
+                  },
+                  "markNodeAsExecuted",
+                ],
+              },
+              onError: {
+                target: "evaluating",
+                actions: [
+                  ({ context, event }) => {
+                    useFlowStore
+                      .getState()
+                      .setAnswer(context.currentNodeId as string, {
+                        error: (event.error as Error).message,
+                      });
+                  },
+                  "markNodeAsError",
+                ],
+              },
+            },
+          },
+
           executing: {
             entry: ["markNodeAsExecuted"],
             always: "evaluating",
@@ -282,6 +354,12 @@ export const flowMachine = createMachine(
           .nodes.find((n) => n.id === context.currentNodeId);
         return node?.type === "gemini";
       },
+      isPuterNode: ({ context }) => {
+        const node = useFlowStore
+          .getState()
+          .nodes.find((n) => n.id === context.currentNodeId);
+        return node?.type === "puter";
+      },
       isOutputNode: ({ context }) => {
         const node = useFlowStore
           .getState()
@@ -321,7 +399,7 @@ export const flowMachine = createMachine(
               if (
                 evaluateCondition(
                   edge.data.condition,
-                  useFlowStore.getState().answers
+                  useFlowStore.getState().answers,
                 )
               ) {
                 nextNodeId = edge.target;
@@ -362,5 +440,5 @@ export const flowMachine = createMachine(
         }
       },
     },
-  }
+  },
 );

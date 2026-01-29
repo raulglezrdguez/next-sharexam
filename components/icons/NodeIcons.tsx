@@ -6,6 +6,7 @@ import {
   Sparkles, // Nodo Gemini (Servicio Generativelanguage)
   StopCircle,
   Play, // Nodo de Finalización
+  Cloud, // Nodo de Puter
 } from "lucide-react";
 
 import NodeIconWrapper from "./NodeIconWrapper"; // Asegúrate de ajustar la ruta
@@ -60,6 +61,16 @@ export const GeminiServiceNodeIcon = () => (
     label="Gemini"
   >
     <Sparkles {...iconStyle} />
+  </NodeIconWrapper>
+);
+
+// 5. Nodo de Gemini (Servicio Generativelanguage)
+export const PuterServiceNodeIcon = () => (
+  <NodeIconWrapper
+    color="linear-gradient(135deg, #358a4f, #27a455)"
+    label="Puter"
+  >
+    <Cloud {...iconStyle} />
   </NodeIconWrapper>
 );
 

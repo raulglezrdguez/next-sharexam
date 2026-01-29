@@ -3,6 +3,7 @@ import InputNodeProperties from "./InputNodeProperties";
 import QuestionNodeProperties from "./QuestionNodeProperties";
 import HttpNodeProperties from "./HttpNodeProperties";
 import GeminiNodeProperties from "./GeminiNodeProperties";
+import PuterNodeProperties from "./PuterNodeProperties";
 import GeminiInfoNodeProperties from "./GeminiInfoNodeProperties";
 import OutputNodeProperties from "./OutputNodeProperties";
 
@@ -21,6 +22,8 @@ const NodeProperties = ({ node }: Props) => {
     return <GeminiInfoNodeProperties id={node.id} data={node.data} />;
   if (node.type === "gemini")
     return <GeminiNodeProperties id={node.id} data={node.data} />;
+  if (node.type === "puter")
+    return <PuterNodeProperties id={node.id} data={node.data} />;
   if (node.type === "output")
     return <OutputNodeProperties id={node.id} data={node.data} />;
 

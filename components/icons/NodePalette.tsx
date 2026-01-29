@@ -6,6 +6,7 @@ import {
   HttpRequestNodeIcon,
   GeminiKeyNodeIcon,
   GeminiServiceNodeIcon,
+  PuterServiceNodeIcon,
   EndNodeIcon,
 } from "./NodeIcons";
 import { MyNodeType } from "@/types/flow";
@@ -22,7 +23,7 @@ export default function NodePalette(): JSX.Element {
    */
   const onDragStart = (
     event: DragEvent<HTMLDivElement>,
-    nodeType: MyNodeType
+    nodeType: MyNodeType,
   ) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "copy";
@@ -71,6 +72,14 @@ export default function NodePalette(): JSX.Element {
           onDragEnd={onDragEnd}
         >
           <GeminiServiceNodeIcon />
+        </div>
+
+        <div
+          draggable
+          onDragStart={(event) => onDragStart(event, "puter")}
+          onDragEnd={onDragEnd}
+        >
+          <PuterServiceNodeIcon />
         </div>
 
         <div

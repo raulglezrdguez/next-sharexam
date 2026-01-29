@@ -15,6 +15,7 @@ import { ExecutionPanel } from "@/components/ExecutionPanel";
 import { QuestionNode } from "@/components/QuestionNode";
 import { HttpNode } from "@/components/HttpNode";
 import { GeminiNode } from "@/components/GeminiNode";
+import { PuterNode } from "@/components/PuterNode";
 
 import "@xyflow/react/dist/style.css";
 import "./styles.css";
@@ -22,6 +23,7 @@ import "./styles.css";
 import {
   GeminiInfoNodeData,
   GeminiNodeData,
+  PuterNodeData,
   HttpNodeData,
   InputNodeData,
   MyEdge,
@@ -44,6 +46,7 @@ const nodeTypes = {
   "http-request": HttpNode,
   "gemini-info": GeminiInfoNode,
   gemini: GeminiNode,
+  puter: PuterNode,
   output: OutputNode,
 };
 
@@ -183,7 +186,7 @@ function FlowWithExecution() {
       if (node.id === nodeSelected?.id) setNodeSelected(null);
       else setNodeSelected(node);
     },
-    [setNodeSelected, nodeSelected]
+    [setNodeSelected, nodeSelected],
   );
 
   const handleEdgeClick = useCallback(
@@ -191,7 +194,7 @@ function FlowWithExecution() {
       if (edgeSelected?.id === edge.id) setEdgeSelected(null);
       else setEdgeSelected(edge);
     },
-    [setEdgeSelected, edgeSelected]
+    [setEdgeSelected, edgeSelected],
   );
 
   const handlePaneClick = useCallback(
@@ -199,7 +202,7 @@ function FlowWithExecution() {
       setNodeSelected(null);
       setEdgeSelected(null);
     },
-    [setNodeSelected, setEdgeSelected]
+    [setNodeSelected, setEdgeSelected],
   );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -214,7 +217,7 @@ function FlowWithExecution() {
       e.preventDefault();
 
       const type = e.dataTransfer.getData(
-        "application/reactflow"
+        "application/reactflow",
       ) as MyNodeType;
       if (!type) return;
 
@@ -239,7 +242,7 @@ function FlowWithExecution() {
 
       addNode({ type, position });
     },
-    [screenToFlowPosition, addNode, nodes]
+    [screenToFlowPosition, addNode, nodes],
   );
 
   const handleNodesDelete = useCallback(() => {

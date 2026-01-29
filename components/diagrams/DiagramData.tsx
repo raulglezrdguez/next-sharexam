@@ -7,6 +7,7 @@ import { useFlowStore } from "@/store/flowStore";
 import {
   GeminiInfoNodeData,
   GeminiNodeData,
+  PuterNodeData,
   HttpNodeData,
   InputNodeData,
   MyEdge,
@@ -67,6 +68,14 @@ const DiagramData = ({ diagram, refresh, editId, setEditId }: Props) => {
             type: "output",
             position: n.position,
             data: n.data as OutputNodeData,
+          });
+          break;
+        case "puter":
+          myNodes.push({
+            id: n.id,
+            type: "puter",
+            position: n.position,
+            data: n.data as PuterNodeData,
           });
           break;
         case "gemini":

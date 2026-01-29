@@ -43,6 +43,14 @@ export const nodeTypeDefaults: Record<MyNodeType, NodeTypeInfo> = {
       temperature: 1.0,
     },
   },
+  puter: {
+    type: "puter",
+    defaultData: {
+      label: "Puter service",
+      prompt: "Prompt...",
+      model: "gpt-5-nano",
+    },
+  },
   output: {
     type: "output",
     defaultData: { label: "Output", result: "", status: "idle" },
